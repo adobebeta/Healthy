@@ -2,7 +2,9 @@ package com.example.a59070090.healthy.weight;
 
 import android.os.Bundle;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,18 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.a59070090.healthy.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -18,6 +32,8 @@ import java.util.ArrayList;
 
 public class WeightFragment extends Fragment {
     ArrayList<Weight> weights = new ArrayList<>();
+    private FirebaseFirestore mdb;
+    private FirebaseAuth _auth;
 
     @Nullable
     @Override
@@ -32,7 +48,7 @@ public class WeightFragment extends Fragment {
         weights.add((new Weight("02 Jan 2018",67,"UP")));
         weights.add((new Weight("03 Jan 2018",69,"UP")));
         weights.add((new Weight("04 Jan 2018",79,"UP")));
-
+//        getData();
 
         ListView weightList = (ListView) getView().findViewById(R.id.weight_list); //id
         WeightAdapter weightAdapter = new WeightAdapter(getActivity(), android.R.layout.list_content ,weights);
@@ -49,5 +65,20 @@ public class WeightFragment extends Fragment {
                         .commit();
             }
         });
+    }
+
+    void getData(){
+        _auth = FirebaseAuth.getInstance();
+        String uId = _auth.getUid();
+        mdb = FirebaseFirestore.getInstance();
+
+        mdb.collection("myfitness").document(uId).collection("weight").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        ArrayList<Weight> _weight = task.getResult();
+                    }
+                });
+
     }
 }

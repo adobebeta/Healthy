@@ -1,5 +1,6 @@
 package com.example.a59070090.healthy;
 
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,9 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.a59070090.healthy.weight.WeightFragment;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
@@ -29,11 +32,13 @@ public class MenuFragment extends Fragment{
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+
         menu = new ArrayList<>();
         menu.add("BMI");
         menu.add("Weight");
         menu.add("Setup");
-
+        menu.add("Sign out");
 
         final ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>( //สร้าง adapter
                 getActivity(), android.R.layout.simple_list_item_1, menu
@@ -54,6 +59,12 @@ public class MenuFragment extends Fragment{
                 else if (menu.get(i).equals("Weight")){
                     Log.d("USER","GOTO WEIGHT");
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_view, new WeightFragment()).addToBackStack(null).commit();
+                }
+                else if (menu.get(i).equals("Sign out")){
+                    Log.d("USER","Sign out from firebase auth");
+                    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                    mAuth.signOut();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_view,new LoginFragment()).commit();
                 }
 
           }

@@ -33,8 +33,18 @@ public class LoginFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
             mAuth = FirebaseAuth.getInstance();
+//            initCheckCurrentUser();
             initLoginBtn();
             initRegisterBtn();
+
+    }
+    void initCheckCurrentUser(){
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser mUser = mAuth.getCurrentUser();
+        if (mUser.equals(null) == false){
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_view, new MenuFragment()).addToBackStack(null).commit();
+        }
+
     }
 
         void initLoginBtn(){
@@ -53,7 +63,10 @@ public class LoginFragment extends Fragment {
                     public void onSuccess(AuthResult authResult) {
                        if (authResult.getUser().isEmailVerified()){
                             Log.d("LOGIN","SUCCESS");
-                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_view, new MenuFragment()).addToBackStack(null).commit();
+                            getActivity().getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.main_view, new MenuFragment())
+                                    .commit();
                         }
                         else{
                            Toast.makeText(getActivity() , "Please Confirm Your Email" , Toast.LENGTH_SHORT).show();

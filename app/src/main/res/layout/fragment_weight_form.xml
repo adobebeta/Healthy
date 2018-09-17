@@ -16,13 +16,13 @@
                 android:id="@+id/weight_form_back_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="back"/>
+                android:hint="BACK"/>
 
             <EditText
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Weight"
+                android:hint="Date"
                 android:id="@+id/weight_form_date" />
 
             <EditText
