@@ -6,11 +6,13 @@ package com.example.a59070090.healthy.weight;
 
 public class Weight {
     private String date;
-    private int weight;
-    private String status;
+    private String weight;
 
-    public Weight(String date, int weight, String status) {
-        this.status = status;
+
+    public Weight(){
+
+    }
+    public Weight(String date, String weight) {
         this.date = date;
         this.weight = weight;
     }
@@ -23,19 +25,12 @@ public class Weight {
         this.date = date;
     }
 
-    public int getWeight() {
+    public String getWeight() {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(String weight) {
         this.weight = weight;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setMeasure(String status) {
-        this.status = status;
-    }
 }

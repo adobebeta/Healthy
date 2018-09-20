@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.support.annotation.Nullable;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.a59070090.healthy.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,6 +24,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -32,9 +34,14 @@ import java.util.ArrayList;
 
 public class WeightFragment extends Fragment {
     ArrayList<Weight> weights = new ArrayList<>();
-    private FirebaseFirestore mdb;
-    private FirebaseAuth _auth;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseFirestore firebaseFirestore;
 
+    public WeightFragment(){
+        this.firebaseAuth = FirebaseAuth.getInstance();
+        this.firebaseFirestore = FirebaseFirestore.getInstance();
+        this.weights = new ArrayList<>();
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -44,16 +51,22 @@ public class WeightFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        weights.add((new Weight("01 Jan 2018",63,"UP")));
-        weights.add((new Weight("02 Jan 2018",67,"UP")));
-        weights.add((new Weight("03 Jan 2018",69,"UP")));
-        weights.add((new Weight("04 Jan 2018",79,"UP")));
-//        getData();
 
-        ListView weightList = (ListView) getView().findViewById(R.id.weight_list); //id
-        WeightAdapter weightAdapter = new WeightAdapter(getActivity(), android.R.layout.list_content ,weights);
-        weightList.setAdapter(weightAdapter);
+//        weights.add((new Weight("01 Jan 2018",63,"UP")));
+//        weights.add((new Weight("02 Jan 2018",67,"UP")));
+//        weights.add((new Weight("03 Jan 2018",69,"UP")));
+//        weights.add((new Weight("04 Jan 2018",79,"UP")));
 
+
+//        ListView weightList = (ListView) getView().findViewById(R.id.weight_list); //id
+//        WeightAdapter weightAdapter = new WeightAdapter(getActivity(), android.R.layout.list_content ,weights);
+//        weightList.setAdapter(weightAdapter);
+
+        addWeightBtn();
+        getValueFromFirebase();
+    }
+
+    void addWeightBtn(){
         Button _addBtn = getView().findViewById(R.id.add_weight);
         _addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,18 +80,37 @@ public class WeightFragment extends Fragment {
         });
     }
 
-    void getData(){
-        _auth = FirebaseAuth.getInstance();
-        String uId = _auth.getUid();
-        mdb = FirebaseFirestore.getInstance();
 
-        mdb.collection("myfitness").document(uId).collection("weight").get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    void getValueFromFirebase(){
+        ListView weightList = (ListView) getView().findViewById(R.id.weight_list); //id
+        final WeightAdapter weightAdapter = new WeightAdapter(getActivity(), android.R.layout.list_content ,weights);
+        weightList.setAdapter(weightAdapter);
+        weights.clear();
+
+        firebaseFirestore
+                .collection("myfitness")
+                .document(firebaseAuth.getUid())
+                .collection("weight")
+                .orderBy("date", Query.Direction.DESCENDING)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        ArrayList<Weight> _weight = task.getResult();
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for(QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                            weights.add(doc.toObject(Weight.class));
+                        }
+                        weightAdapter.notifyDataSetChanged();
+                        Log.d("HISTORY","Query from firestore and set to Arraylist");
                     }
-                });
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("HISTORY","QUERY ERROR");
+                Toast.makeText(getActivity(), "Firestore Error!", Toast.LENGTH_SHORT).show();
+            }
 
+        });
     }
+
+
 }

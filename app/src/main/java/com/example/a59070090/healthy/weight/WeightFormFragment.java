@@ -4,11 +4,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.a59070090.healthy.MenuFragment;
 import com.example.a59070090.healthy.R;
@@ -67,7 +69,7 @@ public class WeightFormFragment extends Fragment{
 
                 String _uid = _auth.getCurrentUser().getUid();
 
-                Weight _data = new Weight(_dateString,Integer.valueOf(_weightString), "UP");
+                Weight _data = new Weight(_dateString,_weightString);
 
                 _firestore.collection("myfitness")
                 .document(_uid).collection("weight")
@@ -77,13 +79,23 @@ public class WeightFormFragment extends Fragment{
                             @Override
                             public void onSuccess(Void aVoid) {
 
+
                             }
+
+
                         }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-
+                        Log.d("WeightForm","onFailExceptionCollection");
+                        Toast.makeText(getActivity() , "กรุณาลองใหม่อีกครั้ง" , Toast.LENGTH_SHORT).show();
                     }
                 });
+
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.main_view, new WeightFragment())
+                        .addToBackStack(null)
+                        .commit();
             }
         });
     }

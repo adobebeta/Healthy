@@ -17,14 +17,15 @@
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:textSize="15dp"
-            android:hint="Date"/>
+            android:hint="Date (D MMMM YY)"/>
 
         <TextView
             android:id="@+id/weight_item_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:textSize="15dp"
+            android:textSize="18dp"
+            android:text="UP"
             android:hint="Status" />
 
     </LinearLayout>
@@ -35,5 +36,5 @@
             android:layout_margin="5dp"
             android:textSize="15dp"
             android:layout_height="wrap_content"
-            android:hint="Weight"/>
+            android:hint="Weight(Kg.)"/>
 </LinearLayout>

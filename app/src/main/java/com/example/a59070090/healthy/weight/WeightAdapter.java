@@ -40,7 +40,7 @@ public class WeightAdapter extends ArrayAdapter<Weight> {
 
         date.setText(weights.get(position).getDate());
         weight.setText(weights.get(position).getWeight()+"");
-        status.setText(weights.get(position).getStatus());
+//        status.setText(weights.get(position).getStatus());
 
         return weightItem;
     }

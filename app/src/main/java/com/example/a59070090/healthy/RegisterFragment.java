@@ -65,6 +65,10 @@ public class RegisterFragment extends Fragment{
                         }
                     });
                 }
+                else if (passwordStr.length() <6){
+                    Log.d("Register","Password is Short");
+                    Toast.makeText(getActivity() , "กรุณากรอก password ให้มีความยาวมากกว่า 6 ตัวอักษร" , Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
