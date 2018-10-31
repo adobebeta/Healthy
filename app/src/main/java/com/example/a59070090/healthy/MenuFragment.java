@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.example.a59070090.healthy.sleep.SleepFragment;
 import com.example.a59070090.healthy.weight.WeightFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -38,6 +39,7 @@ public class MenuFragment extends Fragment{
         menu.add("BMI");
         menu.add("Weight");
         menu.add("Setup");
+        menu.add("Sleep");
         menu.add("Sign out");
 
         final ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>( //สร้าง adapter
@@ -59,6 +61,10 @@ public class MenuFragment extends Fragment{
                 else if (menu.get(i).equals("Weight")){
                     Log.d("USER","GOTO WEIGHT");
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_view, new WeightFragment()).addToBackStack(null).commit();
+                }
+                else if (menu.get(i).equals("Sleep")){
+                    Log.d("USER", "GOTO SLEEP");
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_view, new SleepFragment()).addToBackStack(null).commit();
                 }
                 else if (menu.get(i).equals("Sign out")){
                     Log.d("USER","Sign out from firebase auth");
