@@ -63,9 +63,11 @@ public class LoginFragment extends Fragment {
                     public void onSuccess(AuthResult authResult) {
                        if (authResult.getUser().isEmailVerified()){
                             Log.d("LOGIN","SUCCESS");
-                            getActivity().getSupportFragmentManager()
+                            getActivity()
+                                    .getSupportFragmentManager()
                                     .beginTransaction()
                                     .replace(R.id.main_view, new MenuFragment())
+                                    .addToBackStack(null)
                                     .commit();
                         }
                         else{
